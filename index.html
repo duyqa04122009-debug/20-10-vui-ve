@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Lời chúc dành cho em</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{--bg1:#2a0a1f;--bg2:#0d0410;--card:rgba(255,255,255,.08);--line:rgba(255,255,255,.18);--tx:#ffeef5;--mut:#d9a8bd;--pk:#ff4d8d}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,var(--bg1),var(--bg2));color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:hidden}
+main{max-width:480px;margin:0 auto;padding:20px 16px 40px;position:relative;z-index:2}
+h1{font-size:24px;text-align:center;margin:8px 0 4px}
+p.sub{text-align:center;color:var(--mut);margin:0 0 18px;font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:14px;backdrop-filter:blur(8px)}
+label{display:block;font-size:13px;color:var(--mut);margin:12px 0 5px}
+input,textarea,select{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.3);color:var(--tx);font:inherit;font-size:16px}
+textarea{min-height:110px;resize:vertical}
+button{width:100%;margin-top:14px;padding:14px;border:0;border-radius:14px;background:linear-gradient(135deg,#ff4d8d,#ff7aa8);color:#fff;font-size:16px;font-weight:600;cursor:pointer}
+button:disabled{opacity:.6}
+button.ghost{background:transparent;border:1px solid var(--line);margin-top:10px}
+.err{color:#ff9bb8;font-size:14px;margin-top:10px;text-align:center;min-height:18px}
+.note{font-size:12px;color:var(--mut);text-align:center;margin-top:10px;line-height:1.5}
+.hide{display:none!important}
+#qr{display:flex;justify-content:center;padding:14px;background:#fff;border-radius:14px;margin:14px auto;width:fit-content}
+.link{word-break:break-all;font-size:12px;max-height:100px;overflow:auto;background:rgba(0,0,0,.3);padding:10px;border-radius:10px;user-select:all}
+#thumbs{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+#thumbs div{position:relative;width:64px;height:64px}
+#thumbs img{width:100%;height:100%;object-fit:cover;border-radius:10px;border:2px solid #fff}
+#thumbs b{position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:#ff4d8d;font-size:12px;line-height:20px;text-align:center;cursor:pointer}
+details summary{cursor:pointer;color:var(--mut);font-size:14px;text-align:center}
+#stage{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2}
+canvas{width:100%;max-width:600px;height:62vh;cursor:pointer}
+.hint{color:var(--mut);font-size:14px;animation:bl 1.6s infinite}
+@keyframes bl{50%{opacity:.35}}
+#snd{position:fixed;top:12px;right:12px;z-index:9;width:44px;height:44px;margin:0;padding:0;border-radius:50%;background:rgba(0,0,0,.45);border:1px solid var(--line);font-size:20px}
+#msg,#pic{position:fixed;inset:0;z-index:6;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:20px;background:rgba(13,4,16,.9);cursor:pointer;animation:fi .6s}
+@keyframes fi{from{opacity:0;transform:scale(.94)}}
+.bubble{max-width:440px;text-align:center;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:28px 22px}
+.bubble h2{margin:0 0 14px;color:var(--pk);font-size:24px}
+.bubble p{margin:0;line-height:1.7;white-space:pre-wrap;font-size:17px}
+#pic img{width:min(86vw,420px);height:min(86vw,420px);object-fit:cover;border-radius:16px;border:4px solid #fff;box-shadow:0 10px 40px rgba(255,77,141,.45);animation:fi .4s}
+#pic span{margin-top:14px;color:var(--mut);font-size:14px}
+#hearts,#floats{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+#hearts{z-index:1}#floats{z-index:3}
+.fh{position:absolute;bottom:-40px;opacity:0;animation:fly linear forwards}
+@keyframes fly{0%{transform:translate(0,0) rotate(0);opacity:0}10%{opacity:.9}50%{transform:translate(var(--dx),-55vh) rotate(18deg)}100%{transform:translate(calc(var(--dx)*-1),-115vh) rotate(-18deg);opacity:0}}
+.fp{position:absolute;bottom:-110px;object-fit:cover;border-radius:10px;border:2px solid #fff;box-shadow:0 4px 18px rgba(255,77,141,.5);animation:rise linear forwards}
+@keyframes rise{0%{transform:translate(0,0) rotate(var(--r0));opacity:0}8%{opacity:1}50%{transform:translate(var(--dx),-60vh) rotate(0)}92%{opacity:1}100%{transform:translate(calc(var(--dx)*-1),-125vh) rotate(var(--r1));opacity:0}}
+</style>
+</head>
+<body>
+<div id="hearts"></div>
+<div id="floats"></div>
+
+<main id="create">
+  <h1>💌 Tạo lời chúc</h1>
+  <p class="sub">Không cần máy chủ, không lưu gì cả</p>
+  <div class="card" id="form">
+    <label>Mật khẩu (người nhận nhập để mở)</label>
+    <input id="pw" type="password" placeholder="Tạo mật khẩu" autocomplete="new-password">
+    <label>Nhập lại mật khẩu</label>
+    <input id="pw2" type="password" placeholder="Nhập lại mật khẩu" autocomplete="new-password">
+    <label>Tiêu đề lời chúc</label>
+    <input id="title" placeholder="Gửi em yêu ❤️" maxlength="60">
+    <label>Nội dung lời chúc</label>
+    <textarea id="text" placeholder="Viết lời chúc của bạn..." maxlength="1500"></textarea>
+    <label>Ảnh kỷ niệm (chọn nhiều ảnh, tối đa 8)</label>
+    <input id="img" type="file" accept="image/*" multiple>
+    <div id="thumbs"></div>
+    <label>Nhạc nền (chỉ người tạo mới chọn được)</label>
+    <select id="mel">
+      <option value="0">🎹 Dịu dàng</option>
+      <option value="1">🎶 Lãng mạn</option>
+      <option value="2">✨ Vui tươi</option>
+      <option value="url">🔗 Dán link nhạc mp3</option>
+      <option value="file">📁 Tải file nhạc lên</option>
+      <option value="-1">🔇 Không nhạc</option>
+    </select>
+    <input id="murl" class="hide" style="margin-top:8px" placeholder="https://.../bai-hat.mp3 (link trực tiếp)">
+    <input id="mfile" class="hide" style="margin-top:8px" type="file" accept="audio/*">
+    <div class="note hide" id="mnote">File nhạc làm link rất dài (tối đa ~700KB), nên ưu tiên dán link mp3.</div>
+    <button id="go">Tạo trang lời chúc</button>
+    <div class="err" id="cerr"></div>
+    <div class="note">⏳ Hết hạn sau 24 giờ. Toàn bộ nội dung được mã hoá ngay trong link, không lưu ở đâu khác.</div>
+  </div>
+
+  <div class="card hide" id="done">
+    <h1 style="font-size:20px">🎉 Đã tạo xong!</h1>
+    <p class="sub">Gửi link cho người ấy. Hết hạn sau 24 giờ.</p>
+    <div class="link" id="lnk"></div>
+    <button id="cp">Sao chép link</button>
+    <button class="ghost" id="mkqr">🔳 Tạo mã QR từ link này</button>
+    <button class="ghost" id="mkshort">🖼️ Có ảnh + QR: tạo link ngắn (lưu bản mã hoá)</button>
+    <div class="note" id="snote">Link ngắn lưu bản đã mã hoá trên dịch vụ jsonblob.com. Nội dung vẫn cần mật khẩu mới đọc được và tự hết hạn sau 24 giờ.</div>
+    <button class="ghost" id="again">Tạo trang khác</button>
+  </div>
+
+  <div class="card" id="qrcard">
+    <details>
+      <summary>🔳 Tạo mã QR từ một link bất kỳ</summary>
+      <input id="qurl" style="margin-top:12px" placeholder="Dán link vào đây">
+      <button id="qgo">Tạo QR</button>
+    </details>
+    <div id="qr" class="hide"></div>
+    <div class="note" id="qnote"></div>
+    <button class="ghost hide" id="dlqr">⬇️ Tải ảnh QR</button>
+  </div>
+</main>
+
+<main id="lock" class="hide" style="min-height:100vh;flex-direction:column;justify-content:center">
+  <h1>🔒 Có điều bất ngờ dành cho bạn</h1>
+  <p class="sub">Nhập mật khẩu để mở</p>
+  <div class="card">
+    <input id="vpw" type="password" placeholder="Mật khẩu" autocomplete="off">
+    <button id="open">Mở ra</button>
+    <div class="err" id="verr"></div>
+  </div>
+</main>
+
+<div id="stage" class="hide"><canvas id="cv"></canvas><div class="hint">Chạm vào trái tim 💗</div></div>
+<button id="snd" class="hide">🔊</button>
+<div id="msg" class="hide"><div class="bubble"><h2 id="mt"></h2><p id="mb"></p><p style="margin-top:18px;font-size:13px;color:var(--mut)" id="nx">Chạm để xem ảnh kỷ niệm</p></div></div>
+<div id="pic" class="hide"><img id="pimg" alt="Ảnh kỷ niệm"><span id="pcnt"></span></div>
+<audio id="aud" loop></audio>
+
+<script>
+const TTL=24*60*60*1000,MAXP=8;
+const $=id=>document.getElementById(id);
+const BASE=location.href.split('#')[0];
+let DATA=location.hash.slice(1),W=null,PH=[],lastLink='',lastData='';
+
+/* ---- mã hoá: nén -> AES-GCM (khoá từ mật khẩu) -> base64url ---- */
+const enc=new TextEncoder(),dec=new TextDecoder();
+const b64e=u=>{let s='';for(let i=0;i<u.length;i+=8192)s+=String.fromCharCode.apply(null,u.subarray(i,i+8192));return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')};
+const b64d=s=>{s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';const b=atob(s),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u};
+async function zip(bytes,c){const st=new Blob([bytes]).stream().pipeThrough(c?new CompressionStream('deflate-raw'):new DecompressionStream('deflate-raw'));return new Uint8Array(await new Response(st).arrayBuffer())}
+async function key(pw,salt){const k=await crypto.subtle.importKey('raw',enc.encode(pw),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:150000,hash:'SHA-256'},k,{name:'AES-GCM',length:256},false,['encrypt','decrypt'])}
+async function pack(obj,pw){
+  const salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12));
+  const ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv},await key(pw,salt),await zip(enc.encode(JSON.stringify(obj)),true)));
+  const o=new Uint8Array(28+ct.length);o.set(salt);o.set(iv,16);o.set(ct,28);return b64e(o);
+}
+async function unpack(s,pw){
+  const b=b64d(s),pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:b.slice(16,28)},await key(pw,b.slice(0,16)),b.slice(28));
+  return JSON.parse(dec.decode(await zip(new Uint8Array(pt),false)));
+}
+
+/* ---- ảnh vuông, nén nhỏ ---- */
+const rd=f=>new Promise((r,j)=>{const x=new FileReader();x.onload=()=>r(x.result);x.onerror=j;x.readAsDataURL(f)});
+async function square(file){
+  const url=await rd(file),im=new Image();await new Promise((r,j)=>{im.onload=r;im.onerror=j;im.src=url});
+  const s=Math.min(im.width,im.height),c=document.createElement('canvas');c.width=c.height=340;
+  c.getContext('2d').drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,340,340);
+  let q=.7,o=c.toDataURL('image/jpeg',q);
+  while(o.length>26000&&q>.4){q-=.06;o=c.toDataURL('image/jpeg',q)}
+  return o;
+}
+function drawThumbs(){
+  $('thumbs').innerHTML='';
+  PH.forEach((p,i)=>{const d=document.createElement('div');d.innerHTML='<img src="'+p+'"><b>✕</b>';d.querySelector('b').onclick=()=>{PH.splice(i,1);drawThumbs()};$('thumbs').appendChild(d)});
+}
+$('img').onchange=async e=>{
+  for(const f of e.target.files){if(PH.length>=MAXP)break;try{PH.push(await square(f))}catch(_){}}
+  e.target.value='';drawThumbs();
+};
+$('mel').onchange=()=>{const v=$('mel').value;$('murl').classList.toggle('hide',v!=='url');$('mfile').classList.toggle('hide',v!=='file');$('mnote').classList.toggle('hide',v!=='file')};
+
+/* ---- nhạc dựng sẵn bằng WebAudio ---- */
+const MEL=[[262,330,392,523,392,330,294,392,494,392,294,247],[220,262,330,440,330,262,196,247,294,392,294,247],[392,494,587,784,587,494,440,523,659,784,659,523]];
+let actx=null,mtimer=null,muted=false;
+function playMel(i){
+  actx=new (window.AudioContext||window.webkitAudioContext)();let n=0;const seq=MEL[i],st=.5;
+  const tick=()=>{if(muted)return;const o=actx.createOscillator(),g=actx.createGain(),t=actx.currentTime;
+    o.type='triangle';o.frequency.value=seq[n++%seq.length];o.connect(g);g.connect(actx.destination);
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.16,t+.03);g.gain.exponentialRampToValueAtTime(.001,t+st*1.6);o.start(t);o.stop(t+st*1.7)};
+  tick();mtimer=setInterval(tick,st*1000);
+}
+$('snd').onclick=()=>{muted=!muted;$('aud').muted=muted;$('snd').textContent=muted?'🔇':'🔊'};
+
+/* ---- tim bay + ảnh vuông bay lên ---- */
+function spawnHeart(){
+  const h=document.createElement('span');h.className='fh';
+  h.textContent=['❤️','💖','💗','💕','💘'][Math.floor(Math.random()*5)];
+  h.style.left=Math.random()*100+'vw';h.style.fontSize=(14+Math.random()*26)+'px';
+  h.style.setProperty('--dx',(Math.random()*80-40)+'px');h.style.animationDuration=(6+Math.random()*6)+'s';
+  $('hearts').appendChild(h);setTimeout(()=>h.remove(),12500);
+}
+setInterval(spawnHeart,450);
+let pi=0;
+function spawnPhoto(){
+  if(!W||!W.i||!W.i.length)return;
+  const im=document.createElement('img'),z=54+Math.random()*40;
+  im.className='fp';im.src=W.i[pi++%W.i.length];im.style.width=im.style.height=z+'px';
+  im.style.left=(4+Math.random()*(92-z/6))+'vw';
+  im.style.setProperty('--dx',(Math.random()*60-30)+'px');
+  im.style.setProperty('--r0',(Math.random()*30-15)+'deg');im.style.setProperty('--r1',(Math.random()*30-15)+'deg');
+  const d=9+Math.random()*5;im.style.animationDuration=d+'s';
+  $('floats').appendChild(im);setTimeout(()=>im.remove(),d*1000+300);
+}
+
+/* ---- khởi tạo ---- */
+if(DATA){$('create').classList.add('hide');const lk=$('lock');lk.style.display='flex';lk.classList.remove('hide')}
+addEventListener('hashchange',()=>location.reload());
+
+/* ---- QR ---- */
+async function makeQR(url){
+  const box=$('qr'),note=$('qnote');box.innerHTML='';box.classList.add('hide');$('dlqr').classList.add('hide');note.textContent='';
+  url=(url||'').trim();if(!url){note.textContent='Hãy dán một link.';return}
+  let u=url;
+  if(u.length>1400&&u.length<=4900){
+    note.textContent='Link dài, đang rút gọn...';
+    try{const r=await fetch('https://is.gd/create.php?format=json&url='+encodeURIComponent(u));const j=await r.json();if(j.shorturl)u=j.shorturl}catch(_){}
+  }
+  if(u.length>1400){note.textContent='Link quá dài để làm mã QR (thường do có nhiều ảnh). Hãy gửi bằng link, hoặc dán link rút gọn ở ô trên.';return}
+  try{
+    box.classList.remove('hide');new QRCode(box,{text:u,width:230,height:230,correctLevel:QRCode.CorrectLevel.L});
+    note.textContent=u!==url?'Đã rút gọn: '+u:'';$('dlqr').classList.remove('hide');
+    $('qrcard').scrollIntoView({behavior:'smooth'});
+  }catch(_){box.classList.add('hide');note.textContent='Không tạo được QR cho link này.'}
+}
+$('qgo').onclick=()=>makeQR($('qurl').value);
+$('mkqr').onclick=()=>{$('qrcard').querySelector('details').open=true;$('qurl').value=lastLink;makeQR(lastLink)};
+$('dlqr').onclick=()=>{const c=$('qr').querySelector('canvas');if(!c)return;const a=document.createElement('a');a.href=c.toDataURL('image/png');a.download='ma-qr.png';a.click()};
+
+/* ---- tạo ---- */
+$('go').onclick=async()=>{
+  const e=$('cerr');e.textContent='';const pw=$('pw').value;
+  if(pw.length<4)return e.textContent='Mật khẩu cần ít nhất 4 ký tự.';
+  if(pw!==$('pw2').value)return e.textContent='Hai mật khẩu chưa khớp.';
+  if(!$('title').value.trim()||!$('text').value.trim())return e.textContent='Hãy nhập tiêu đề và lời chúc.';
+  if(!window.CompressionStream||!crypto.subtle)return e.textContent='Trình duyệt chưa hỗ trợ, hãy dùng Chrome/Safari bản mới và mở bằng https.';
+  const o={t:$('title').value.trim(),x:$('text').value.trim(),e:Date.now()+TTL,i:PH};
+  const mv=$('mel').value;
+  if(mv==='url'){const u=$('murl').value.trim();if(!/^https?:\/\//.test(u))return e.textContent='Link nhạc phải bắt đầu bằng http hoặc https.';o.mu=u}
+  else if(mv==='file'){const f=$('mfile').files[0];if(!f)return e.textContent='Hãy chọn file nhạc.';if(f.size>700000)return e.textContent='File nhạc quá lớn (tối đa ~700KB). Hãy dán link mp3.';o.ma=await rd(f)}
+  else o.m=+mv;
+  $('go').disabled=true;$('go').textContent='Đang mã hoá...';
+  try{
+    lastData=await pack(o,pw);lastLink=BASE+'#'+lastData;
+    $('form').classList.add('hide');$('done').classList.remove('hide');$('lnk').textContent=lastLink;
+    if(lastLink.length<=1400)makeQR(lastLink);
+  }catch(err){e.textContent='Có lỗi xảy ra, thử lại nhé.'}
+  $('go').disabled=false;$('go').textContent='Tạo trang lời chúc';
+};
+$('mkshort').onclick=async()=>{
+  const n=$('snote'),b=$('mkshort');b.disabled=true;n.textContent='Đang tạo link ngắn...';
+  try{
+    const r=await fetch('https://jsonblob.com/api/jsonBlob',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({d:lastData})});
+    const loc=r.headers.get('Location')||'',id=loc.split('/').pop();
+    if(!r.ok||!id)throw 0;
+    lastLink=BASE+'#b='+id;$('lnk').textContent=lastLink;$('qurl').value=lastLink;
+    n.textContent='Xong! Link ngắn đã sẵn sàng, bên dưới là mã QR.';
+    $('qrcard').querySelector('details').open=true;makeQR(lastLink);
+  }catch(_){n.textContent='Không tạo được link ngắn (dịch vụ từ chối hoặc bị chặn). Bạn gửi bằng link dài nhé.'}
+  b.disabled=false;
+};
+$('cp').onclick=async()=>{try{await navigator.clipboard.writeText(lastLink);$('cp').textContent='Đã sao chép ✓'}catch(_){}};
+$('again').onclick=()=>{location.hash='';location.reload()};
+
+/* ---- mở ---- */
+$('open').onclick=async()=>{
+  if(DATA.startsWith('b=')){
+    try{const r=await fetch('https://jsonblob.com/api/jsonBlob/'+DATA.slice(2),{headers:{Accept:'application/json'}});DATA=(await r.json()).d;if(!DATA)throw 0}
+    catch(_){$('verr').textContent='Không tải được lời chúc (link hết hạn hoặc lỗi mạng).';DATA=location.hash.slice(1);return}
+  }
+  try{W=await unpack(DATA,$('vpw').value)}catch(_){$('verr').textContent='Sai mật khẩu, hoặc link bị lỗi/cắt mất.';return}
+  if(Date.now()>W.e){$('lock').innerHTML='<main><h1>💔</h1><p class="sub">Lời chúc đã hết hạn (24 giờ).</p></main>';return}
+  $('lock').style.display='none';$('stage').classList.remove('hide');
+  startHeart();for(let i=0;i<10;i++)spawnHeart();
+  if(W.i&&W.i.length){for(let i=0;i<Math.min(5,W.i.length+2);i++)setTimeout(spawnPhoto,i*700);setInterval(spawnPhoto,1500)}
+  const src=W.ma||W.mu;
+  if(src){const a=$('aud');a.src=src;a.play().catch(()=>{});$('snd').classList.remove('hide')}
+  else if(W.m>=0){playMel(W.m);$('snd').classList.remove('hide')}
+};
+$('vpw').addEventListener('keydown',e=>{if(e.key==='Enter')$('open').click()});
+
+/* ---- lời chúc → ảnh ---- */
+let gi=0;
+$('cv').onclick=()=>{$('mt').textContent=W.t;$('mb').textContent=W.x;$('nx').style.display=(W.i&&W.i.length)?'':'none';$('msg').classList.remove('hide')};
+function showPic(){const n=W.i.length;$('pimg').src=W.i[gi];$('pcnt').textContent=(gi+1)+' / '+n+(gi<n-1?' · chạm để xem tiếp':' · chạm để đóng');$('pic').classList.remove('hide')}
+$('msg').onclick=()=>{$('msg').classList.add('hide');if(W.i&&W.i.length){gi=0;showPic()}};
+$('pic').onclick=()=>{gi++;if(gi>=W.i.length)$('pic').classList.add('hide');else showPic()};
+
+/* ---- trái tim 3D đập (hạt) ---- */
+function startHeart(){
+  const cv=$('cv'),ctx=cv.getContext('2d'),pts=[];
+  for(let i=0;i<5200;i++){
+    const t=Math.random()*Math.PI*2,v=Math.acos(2*Math.random()-1),sh=Math.pow(Math.sin(v),.85);
+    const x=16*Math.pow(Math.sin(t),3),y=13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t);
+    pts.push([x*sh/17,-y*sh/17+.05,Math.cos(v)*.55*(1-Math.abs(x)/40),Math.random()]);
+  }
+  function fit(){const r=devicePixelRatio||1;cv.width=cv.clientWidth*r;cv.height=cv.clientHeight*r}
+  fit();addEventListener('resize',fit);
+  const beat=t=>{const p=(t%1.1)/1.1;return 1+.13*Math.exp(-Math.pow((p-.08)*14,2))+.09*Math.exp(-Math.pow((p-.3)*12,2))};
+  function frame(ms){
+    const t=ms/1000,w=cv.width,h=cv.height,s=Math.min(w,h)*.42*beat(t);
+    ctx.clearRect(0,0,w,h);
+    const a=Math.sin(t*.6)*.9,ca=Math.cos(a),sa=Math.sin(a);
+    const arr=pts.map(p=>[p[0]*ca+p[2]*sa,p[1],-p[0]*sa+p[2]*ca,p[3]]).sort((m,n)=>m[2]-n[2]);
+    for(const p of arr){
+      const f=.5+.5*p[2]/.6,r=(1.2+2.2*f)*(w/700+.5),l=45+30*f+p[3]*10;
+      ctx.fillStyle='hsla(340,95%,'+l+'%,'+(.45+.5*f)+')';
+      ctx.beginPath();ctx.arc(w/2+p[0]*s,h/2+p[1]*s,r,0,6.3);ctx.fill();
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+</script>
+</body>
+</html>
