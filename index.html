@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Lời chúc dành cho em</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{--bg1:#2a0a1f;--bg2:#06020a;--card:rgba(255,255,255,.08);--line:rgba(255,255,255,.18);--tx:#ffeef5;--mut:#d9a8bd;--pk:#ff4d8d}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,var(--bg1),var(--bg2));color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:hidden}
+main{max-width:480px;margin:0 auto;padding:20px 16px 40px;position:relative;z-index:2}
+h1{font-size:24px;text-align:center;margin:8px 0 4px}
+p.sub{text-align:center;color:var(--mut);margin:0 0 18px;font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:14px;backdrop-filter:blur(8px)}
+label{display:block;font-size:13px;color:var(--mut);margin:12px 0 5px}
+input,textarea,select{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.3);color:var(--tx);font:inherit;font-size:16px}
+textarea{min-height:100px;resize:vertical}
+button{width:100%;margin-top:14px;padding:14px;border:0;border-radius:14px;background:linear-gradient(135deg,#ff4d8d,#ff7aa8);color:#fff;font-size:16px;font-weight:600;cursor:pointer}
+button:disabled{opacity:.6}
+button.ghost{background:transparent;border:1px solid var(--line);margin-top:10px}
+.err{color:#ff9bb8;font-size:14px;margin-top:10px;text-align:center;min-height:18px}
+.note{font-size:12px;color:var(--mut);text-align:center;margin-top:10px;line-height:1.5}
+.hide{display:none!important}
+#qr{margin:14px auto;max-width:340px}
+#qr canvas{width:100%;display:block;border-radius:16px;box-shadow:0 8px 30px rgba(255,77,141,.35)}
+.link{word-break:break-all;font-size:12px;max-height:100px;overflow:auto;background:rgba(0,0,0,.3);padding:10px;border-radius:10px;user-select:all}
+#thumbs{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+#thumbs div{position:relative;width:64px;height:64px}
+#thumbs img{width:100%;height:100%;object-fit:cover;border-radius:10px;border:2px solid #fff}
+#thumbs b{position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:#ff4d8d;font-size:12px;line-height:20px;text-align:center;cursor:pointer}
+details summary{cursor:pointer;color:var(--mut);font-size:14px;text-align:center}
+#bday{text-align:center;letter-spacing:2px;cursor:pointer}
+.kdisp{font:600 26px ui-monospace,Menlo,Consolas,monospace;text-align:center;letter-spacing:3px;padding:14px 8px;border-radius:14px;background:rgba(0,0,0,.35);border:1px solid var(--line);color:#ffd9e8;text-shadow:0 0 10px #ff3d85}
+.kgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+.key{margin:0;padding:0;height:62px;font-size:24px;font-weight:600;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid var(--line);box-shadow:0 0 14px rgba(255,77,141,.18)}
+.key:active{background:rgba(255,77,141,.5)}
+.kerr{min-height:20px;margin-top:10px;text-align:center;color:#ff9bb8;font-size:14px}
+.shake{animation:shk .4s}
+@keyframes shk{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+#kpov{position:fixed;inset:0;z-index:20;background:rgba(6,2,10,.92);display:flex;align-items:center;justify-content:center;padding:20px}
+#kpov .box{width:100%;max-width:340px}
+#cv{position:fixed;inset:0;width:100%;height:100%;z-index:1;touch-action:none}
+#stage{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:26px;z-index:2;pointer-events:none}
+.hint{color:var(--mut);font-size:14px;animation:bl 1.6s infinite;min-height:20px}
+@keyframes bl{50%{opacity:.35}}
+#ttl{position:fixed;left:0;right:0;top:calc(8% + env(safe-area-inset-top,0px));text-align:center;z-index:3;font-size:clamp(26px,8.5vw,46px);font-weight:700;color:#ffe3ee;padding:0 16px;opacity:0;transform:translateY(14px) scale(.96);transition:opacity 1.4s,transform 1.4s;pointer-events:none;text-shadow:0 0 8px #ff7aa8,0 0 20px #ff3d85,0 0 44px #ff3d85,0 0 80px #ff1f6d}
+#ttl.on{opacity:1;transform:none}
+#snd{position:fixed;top:12px;right:12px;z-index:9;width:44px;height:44px;margin:0;padding:0;border-radius:50%;background:rgba(0,0,0,.45);border:1px solid var(--line);font-size:20px}
+#msg{position:fixed;inset:0;z-index:6;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(6,2,10,.88);cursor:pointer}
+.card2{position:relative;max-width:390px;width:100%;text-align:center;color:#5a1a33;padding:34px 26px 26px;border-radius:20px;background:linear-gradient(160deg,#fff9fb,#ffe1ec);border:2px solid #f6b3cb;box-shadow:inset 0 0 0 6px #fff,0 20px 70px rgba(255,60,130,.5);animation:cin .9s cubic-bezier(.2,.8,.2,1)}
+@keyframes cin{from{opacity:0;transform:perspective(800px) rotateX(-55deg) translateY(40px) scale(.9)}}
+.card2:before,.card2:after{content:"❤";position:absolute;top:12px;color:#ff6fa5;font-size:16px}
+.card2:before{left:16px}.card2:after{right:16px}
+.card2 h2{margin:0 0 14px;font:italic 700 28px Georgia,"Times New Roman",serif;color:#d6336c}
+.card2 p{margin:0;line-height:1.75;white-space:pre-wrap;font-size:17px;font-family:Georgia,"Times New Roman",serif}
+.card2 .ft{margin-top:20px;font-size:12px;color:#c07a95;font-family:system-ui,sans-serif}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+
+<main id="create">
+  <h1>💌 Tạo lời chúc</h1>
+  <p class="sub">Không cần máy chủ, không lưu gì cả</p>
+  <div class="card" id="form">
+    <label>Ngày sinh của người ấy (dùng làm mật khẩu)</label>
+    <input id="bday" readonly placeholder="Chạm để nhập ngày sinh">
+    <label>Tiêu đề (hiện ra khi trái tim ghép xong)</label>
+    <input id="title" placeholder="Chúc mừng 20/10 💖" maxlength="50">
+    <label>Nội dung trong tấm thiệp</label>
+    <textarea id="text" placeholder="Viết lời chúc của bạn..." maxlength="1500"></textarea>
+    <label>Dòng chữ bay lên ở cuối (không bắt buộc)</label>
+    <input id="fly" placeholder="Chúc chị em 20/10 vui vẻ" maxlength="80">
+    <label>Ảnh kỷ niệm (chọn nhiều ảnh, tối đa 8)</label>
+    <input id="img" type="file" accept="image/*" multiple>
+    <div id="thumbs"></div>
+    <label>Nhạc nền (chỉ người tạo mới chọn được)</label>
+    <select id="mel">
+      <option value="0">🎹 Dịu dàng</option>
+      <option value="1">🎶 Lãng mạn</option>
+      <option value="2">✨ Vui tươi</option>
+      <option value="url">🔗 Dán link nhạc mp3</option>
+      <option value="file">📁 Tải file nhạc lên</option>
+      <option value="-1">🔇 Không nhạc</option>
+    </select>
+    <input id="murl" class="hide" style="margin-top:8px" placeholder="https://.../bai-hat.mp3 (link trực tiếp)">
+    <input id="mfile" class="hide" style="margin-top:8px" type="file" accept="audio/*">
+    <div class="note hide" id="mnote">File nhạc làm link rất dài (tối đa ~700KB), nên ưu tiên dán link mp3.</div>
+    <button id="go">Tạo trang lời chúc</button>
+    <div class="err" id="cerr"></div>
+    <div class="note">⏳ Hết hạn sau 24 giờ. Nội dung được mã hoá ngay trong link. Lưu ý: mật khẩu là ngày sinh nên khá dễ đoán, đừng dùng cho nội dung quá riêng tư.</div>
+  </div>
+
+  <div class="card hide" id="done">
+    <h1 style="font-size:20px">🎉 Đã tạo xong!</h1>
+    <p class="sub">Gửi link cho người ấy. Hết hạn sau 24 giờ.</p>
+    <div class="link" id="lnk"></div>
+    <button id="cp">Sao chép link</button>
+    <button class="ghost" id="mkqr">💗 Tạo mã QR (tim + bó hoa)</button>
+    <button class="ghost" id="mkshort">🖼️ Có ảnh + QR: tạo link ngắn (lưu bản mã hoá)</button>
+    <div class="note" id="snote">Link ngắn lưu bản đã mã hoá trên jsonblob.com. Vẫn cần ngày sinh mới đọc được và tự hết hạn sau 24 giờ.</div>
+    <button class="ghost" id="again">Tạo trang khác</button>
+  </div>
+
+  <div class="card" id="qrcard">
+    <details>
+      <summary>💗 Tạo mã QR từ một link bất kỳ</summary>
+      <input id="qurl" style="margin-top:12px" placeholder="Dán link vào đây">
+      <button id="qgo">Tạo QR</button>
+    </details>
+    <div id="qr" class="hide"></div>
+    <div class="note" id="qnote"></div>
+    <button class="ghost hide" id="dlqr">⬇️ Tải ảnh QR</button>
+  </div>
+</main>
+
+<main id="lock" class="hide" style="min-height:100vh;flex-direction:column;justify-content:center">
+  <h1>🔒 Có điều bất ngờ dành cho bạn</h1>
+  <p class="sub">Nhập ngày sinh của bạn để mở</p>
+  <div class="card" id="kpin"></div>
+</main>
+
+<div id="kpov" class="hide"><div class="box"><h1 style="font-size:20px">Ngày sinh của người ấy</h1><p class="sub">dd / mm / yyyy</p><div id="kpbox"></div><button class="ghost" id="kpx">Đóng</button></div></div>
+
+<div id="stage" class="hide"><div class="hint" id="hint"></div></div>
+<div id="ttl"></div>
+<button id="snd" class="hide">🔊</button>
+<div id="msg" class="hide"><div class="card2"><h2 id="mt"></h2><p id="mb"></p><div class="ft">— chạm để tiếp tục —</div></div></div>
+<audio id="aud" loop></audio>
+
+<script>
+const TTL=24*60*60*1000,MAXP=8;
+const $=id=>document.getElementById(id);
+const BASE=location.href.split('#')[0];
+let DATA=location.hash.slice(1),W=null,PH=[],lastLink='',lastData='',bday='',payload=null;
+
+/* ---- mã hoá: nén -> AES-GCM (khoá từ mật khẩu) -> base64url ---- */
+const enc=new TextEncoder(),dec=new TextDecoder();
+const b64e=u=>{let s='';for(let i=0;i<u.length;i+=8192)s+=String.fromCharCode.apply(null,u.subarray(i,i+8192));return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')};
+const b64d=s=>{s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';const b=atob(s),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u};
+async function zip(bytes,c){const st=new Blob([bytes]).stream().pipeThrough(c?new CompressionStream('deflate-raw'):new DecompressionStream('deflate-raw'));return new Uint8Array(await new Response(st).arrayBuffer())}
+async function key(pw,salt){const k=await crypto.subtle.importKey('raw',enc.encode(pw),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:150000,hash:'SHA-256'},k,{name:'AES-GCM',length:256},false,['encrypt','decrypt'])}
+async function pack(obj,pw){
+  const salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12));
+  const ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv},await key(pw,salt),await zip(enc.encode(JSON.stringify(obj)),true)));
+  const o=new Uint8Array(28+ct.length);o.set(salt);o.set(iv,16);o.set(ct,28);return b64e(o);
+}
+async function unpack(s,pw){
+  const b=b64d(s),pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:b.slice(16,28)},await key(pw,b.slice(0,16)),b.slice(28));
+  return JSON.parse(dec.decode(await zip(new Uint8Array(pt),false)));
+}
+
+/* ---- bàn phím số nhập ngày sinh ---- */
+const fmtB=d=>{let o='';for(let i=0;i<8;i++){o+=i<d.length?d[i]:'_';if(i===1||i===3)o+=' / '}return o};
+const validB=d=>{const D=+d.slice(0,2),M=+d.slice(2,4),Y=+d.slice(4);return D>=1&&D<=31&&M>=1&&M<=12&&Y>=1900&&Y<=2100&&new Date(Y,M-1,D).getDate()===D};
+function buildKeypad(root,onDone){
+  let d='';root.innerHTML='<div class="kdisp"></div><div class="kgrid"></div><div class="kerr"></div>';
+  const disp=root.querySelector('.kdisp'),grid=root.querySelector('.kgrid'),err=root.querySelector('.kerr');
+  const draw=()=>disp.textContent=fmtB(d);
+  const ctl={reset(m){d='';draw();err.textContent=m||'';if(m){disp.classList.remove('shake');void disp.offsetWidth;disp.classList.add('shake')}}};
+  ['1','2','3','4','5','6','7','8','9','C','0','⌫'].forEach(k=>{
+    const b=document.createElement('button');b.textContent=k;b.className='key';
+    b.onclick=()=>{err.textContent='';if(k==='C')d='';else if(k==='⌫')d=d.slice(0,-1);else if(d.length<8)d+=k;draw();
+      if(d.length===8){if(!validB(d)){ctl.reset('Ngày sinh không hợp lệ');return}onDone(d,ctl)}};
+    grid.appendChild(b);
+  });
+  draw();return ctl;
+}
+
+/* ---- ảnh vuông nén nhỏ ---- */
+const rd=f=>new Promise((r,j)=>{const x=new FileReader();x.onload=()=>r(x.result);x.onerror=j;x.readAsDataURL(f)});
+async function square(file){
+  const url=await rd(file),im=new Image();await new Promise((r,j)=>{im.onload=r;im.onerror=j;im.src=url});
+  const s=Math.min(im.width,im.height),c=document.createElement('canvas');c.width=c.height=340;
+  c.getContext('2d').drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,340,340);
+  let q=.7,o=c.toDataURL('image/jpeg',q);
+  while(o.length>26000&&q>.4){q-=.06;o=c.toDataURL('image/jpeg',q)}
+  return o;
+}
+function drawThumbs(){
+  $('thumbs').innerHTML='';
+  PH.forEach((p,i)=>{const d=document.createElement('div');d.innerHTML='<img src="'+p+'"><b>✕</b>';d.querySelector('b').onclick=()=>{PH.splice(i,1);drawThumbs()};$('thumbs').appendChild(d)});
+}
+$('img').onchange=async e=>{for(const f of e.target.files){if(PH.length>=MAXP)break;try{PH.push(await square(f))}catch(_){}}e.target.value='';drawThumbs()};
+$('mel').onchange=()=>{const v=$('mel').value;$('murl').classList.toggle('hide',v!=='url');$('mfile').classList.toggle('hide',v!=='file');$('mnote').classList.toggle('hide',v!=='file')};
+
+/* ---- nhạc dựng sẵn ---- */
+const MEL=[[262,330,392,523,392,330,294,392,494,392,294,247],[220,262,330,440,330,262,196,247,294,392,294,247],[392,494,587,784,587,494,440,523,659,784,659,523]];
+let actx=null,muted=false;
+function playMel(i){
+  actx=new (window.AudioContext||window.webkitAudioContext)();let n=0;const seq=MEL[i],st=.5;
+  const tick=()=>{if(muted)return;const o=actx.createOscillator(),g=actx.createGain(),t=actx.currentTime;
+    o.type='triangle';o.frequency.value=seq[n++%seq.length];o.connect(g);g.connect(actx.destination);
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.16,t+.03);g.gain.exponentialRampToValueAtTime(.001,t+st*1.6);o.start(t);o.stop(t+st*1.7)};
+  tick();setInterval(tick,st*1000);
+}
+$('snd').onclick=()=>{muted=!muted;$('aud').muted=muted;$('snd').textContent=muted?'🔇':'🔊'};
+
+/* ---- QR: tim + bó hoa ---- */
+function mk(w,h,fn){const c=document.createElement('canvas');c.width=w;c.height=h;fn(c.getContext('2d'),w,h);return c}
+function heartPath(c,cx,cy,s){c.beginPath();for(let i=0;i<=40;i++){const t=i/40*6.2832,x=16*Math.pow(Math.sin(t),3),y=-(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t));i?c.lineTo(cx+x*s,cy+y*s):c.moveTo(cx+x*s,cy+y*s)}c.closePath()}
+function rrect(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
+function roseAt(c,x,y,r,hue,sat,l){c.save();c.shadowColor='rgba(80,0,30,.35)';c.shadowBlur=8;for(let k=0;k<5;k++){c.fillStyle='hsl('+hue+','+sat+'%,'+Math.min(96,l-12+k*6)+'%)';c.beginPath();c.arc(x,y,r*(1-k*.17),0,6.3);c.fill()}
+  c.shadowBlur=0;c.strokeStyle='rgba(255,255,255,.45)';c.lineWidth=Math.max(1,r/14);c.beginPath();for(let a=0;a<13;a+=.2){const q=r*.07*a;c.lineTo(x+Math.cos(a)*q,y+Math.sin(a)*q)}c.stroke();c.restore()}
+function drawFancyQR(url){
+  const q=new QRCode(document.createElement('div'),{text:url,width:64,height:64,correctLevel:QRCode.CorrectLevel.M}),m=q._oQRCode,n=m.getModuleCount();
+  const Wd=720,Ht=900,cv=document.createElement('canvas');cv.width=Wd;cv.height=Ht;const c=cv.getContext('2d');
+  let sd=7;const R=()=>(sd=sd*16807%2147483647)/2147483647;
+  const g=c.createLinearGradient(0,0,0,Ht);g.addColorStop(0,'#fff3f7');g.addColorStop(1,'#ffd9e6');c.fillStyle=g;c.fillRect(0,0,Wd,Ht);
+  for(let i=0;i<28;i++){const a=i/28*6.2832;c.save();c.translate(360+Math.cos(a)*310,380+Math.sin(a)*335);c.rotate(a);c.fillStyle='hsl('+(125+R()*22)+',45%,'+(26+R()*14)+'%)';c.beginPath();c.ellipse(0,0,70+R()*34,26,0,0,6.3);c.fill();c.restore()}
+  const cols=[[345,78,50],[350,85,58],[330,70,70],[15,85,62],[48,90,66],[0,0,92]];
+  for(let i=0;i<70;i++){const a=R()*6.2832,d=Math.sqrt(R()),px=360+Math.cos(a)*d*335,py=375+Math.sin(a)*d*345;if(py>660)continue;const k=cols[Math.floor(R()*cols.length)];roseAt(c,px,py,32+R()*34,k[0],k[1],k[2])}
+  c.fillStyle='#e8c698';c.beginPath();c.moveTo(110,620);c.lineTo(610,620);c.lineTo(400,900);c.lineTo(320,900);c.closePath();c.fill();
+  c.fillStyle='rgba(255,255,255,.25)';c.beginPath();c.moveTo(110,620);c.lineTo(360,760);c.lineTo(250,900);c.lineTo(320,900);c.closePath();c.fill();
+  c.fillStyle='#ff4d8d';c.beginPath();c.ellipse(310,745,52,26,-.3,0,6.3);c.fill();c.beginPath();c.ellipse(410,745,52,26,.3,0,6.3);c.fill();c.fillStyle='#d6336c';c.beginPath();c.arc(360,748,18,0,6.3);c.fill();
+  c.save();c.shadowColor='rgba(120,0,50,.45)';c.shadowBlur=30;c.fillStyle='#fff';rrect(c,120,150,480,480,38);c.fill();c.restore();
+  const ms=424/n,ox=148,oy=178;c.fillStyle='#8c0f3a';
+  for(let r=0;r<n;r++)for(let k=0;k<n;k++){if(!m.isDark(r,k))continue;const x=ox+k*ms,y=oy+r*ms,fnd=(r<7&&k<7)||(r<7&&k>=n-7)||(r>=n-7&&k<7);
+    if(fnd)c.fillRect(x,y,ms+.6,ms+.6);else{heartPath(c,x+ms/2,y+ms/2-2.5*ms/34,ms/34);c.fill()}}
+  return cv;
+}
+async function makeQR(url){
+  const box=$('qr'),note=$('qnote');box.innerHTML='';box.classList.add('hide');$('dlqr').classList.add('hide');note.textContent='';
+  url=(url||'').trim();if(!url){note.textContent='Hãy dán một link.';return}
+  let u=url;
+  if(u.length>360&&u.length<=4900){note.textContent='Link dài, đang rút gọn...';
+    try{const r=await fetch('https://is.gd/create.php?format=json&url='+encodeURIComponent(u));const j=await r.json();if(j.shorturl)u=j.shorturl}catch(_){}}
+  if(u.length>360){note.textContent='Link quá dài để làm QR (thường do có ảnh). Hãy bấm "Có ảnh + QR: tạo link ngắn" hoặc gửi bằng link.';return}
+  try{box.appendChild(drawFancyQR(u));box.classList.remove('hide');note.textContent=u!==url?'Đã rút gọn: '+u:'';$('dlqr').classList.remove('hide');$('qrcard').scrollIntoView({behavior:'smooth'})}
+  catch(_){note.textContent='Không tạo được QR cho link này.'}
+}
+$('qgo').onclick=()=>makeQR($('qurl').value);
+$('mkqr').onclick=()=>{$('qrcard').querySelector('details').open=true;$('qurl').value=lastLink;makeQR(lastLink)};
+$('dlqr').onclick=()=>{const c=$('qr').querySelector('canvas');if(!c)return;const a=document.createElement('a');a.href=c.toDataURL('image/png');a.download='ma-qr.png';a.click()};
+
+/* ---- tạo lời chúc ---- */
+$('bday').onclick=()=>{$('kpov').classList.remove('hide');buildKeypad($('kpbox'),d=>{bday=d;$('bday').value=fmtB(d);$('kpov').classList.add('hide')})};
+$('kpx').onclick=()=>$('kpov').classList.add('hide');
+$('go').onclick=async()=>{
+  const e=$('cerr');e.textContent='';
+  if(bday.length!==8)return e.textContent='Hãy nhập ngày sinh của người ấy.';
+  if(!$('title').value.trim()||!$('text').value.trim())return e.textContent='Hãy nhập tiêu đề và nội dung thiệp.';
+  if(!window.CompressionStream||!crypto.subtle)return e.textContent='Trình duyệt chưa hỗ trợ, hãy dùng Chrome/Safari bản mới và mở bằng https.';
+  const o={t:$('title').value.trim(),x:$('text').value.trim(),f:$('fly').value.trim(),e:Date.now()+TTL,i:PH};
+  const mv=$('mel').value;
+  if(mv==='url'){const u=$('murl').value.trim();if(!/^https?:\/\//.test(u))return e.textContent='Link nhạc phải bắt đầu bằng http hoặc https.';o.mu=u}
+  else if(mv==='file'){const f=$('mfile').files[0];if(!f)return e.textContent='Hãy chọn file nhạc.';if(f.size>700000)return e.textContent='File nhạc quá lớn (tối đa ~700KB). Hãy dán link mp3.';o.ma=await rd(f)}
+  else o.m=+mv;
+  $('go').disabled=true;$('go').textContent='Đang mã hoá...';
+  try{
+    lastData=await pack(o,bday);lastLink=BASE+'#'+lastData;
+    $('form').classList.add('hide');$('done').classList.remove('hide');$('lnk').textContent=lastLink;
+    if(lastLink.length<=360)makeQR(lastLink);
+  }catch(err){e.textContent='Có lỗi xảy ra, thử lại nhé.'}
+  $('go').disabled=false;$('go').textContent='Tạo trang lời chúc';
+};
+$('mkshort').onclick=async()=>{
+  const n=$('snote'),b=$('mkshort');b.disabled=true;n.textContent='Đang tạo link ngắn...';
+  try{
+    const r=await fetch('https://jsonblob.com/api/jsonBlob',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({d:lastData})});
+    const id=(r.headers.get('Location')||'').split('/').pop();if(!r.ok||!id)throw 0;
+    lastLink=BASE+'#b='+id;$('lnk').textContent=lastLink;$('qurl').value=lastLink;
+    n.textContent='Xong! Link ngắn đã sẵn sàng, bên dưới là mã QR.';
+    $('qrcard').querySelector('details').open=true;makeQR(lastLink);
+  }catch(_){n.textContent='Không tạo được link ngắn (dịch vụ từ chối hoặc bị chặn). Bạn gửi bằng link dài nhé.'}
+  b.disabled=false;
+};
+$('cp').onclick=async()=>{try{await navigator.clipboard.writeText(lastLink);$('cp').textContent='Đã sao chép ✓'}catch(_){}};
+$('again').onclick=()=>{location.hash='';location.reload()};
+
+/* ---- người nhận mở link ---- */
+addEventListener('hashchange',()=>location.reload());
+if(DATA){
+  $('create').classList.add('hide');const lk=$('lock');lk.style.display='flex';lk.classList.remove('hide');
+  buildKeypad($('kpin'),tryOpen);
+}
+async function tryOpen(d,ctl){
+  if(!payload){
+    if(DATA.startsWith('b=')){
+      try{const r=await fetch('https://jsonblob.com/api/jsonBlob/'+DATA.slice(2),{headers:{Accept:'application/json'}});payload=(await r.json()).d;if(!payload)throw 0}
+      catch(_){return ctl.reset('Không tải được lời chúc (hết hạn hoặc lỗi mạng).')}
+    }else payload=DATA;
+  }
+  try{W=await unpack(payload,d)}catch(_){return ctl.reset('Sai ngày sinh, thử lại nhé 💗')}
+  if(Date.now()>W.e){$('lock').innerHTML='<h1>💔</h1><p class="sub">Lời chúc đã hết hạn (24 giờ).</p>';return}
+  $('lock').style.display='none';$('stage').classList.remove('hide');
+  const src=W.ma||W.mu;
+  if(src){const a=$('aud');a.src=src;a.play().catch(()=>{});$('snd').classList.remove('hide')}
+  else if(W.m>=0){playMel(W.m);$('snd').classList.remove('hide')}
+  SC.enter(W);
+}
+
+/* ---- cảnh 3D ---- */
+function lines(s){const out=[];for(const ln of s.split('\n')){let cur='';for(const w of ln.split(/\s+/).filter(Boolean)){if(cur&&(cur+' '+w).length>16){out.push(cur);cur=w}else cur=(cur+' '+w).trim()}if(cur)out.push(cur)}return out}
+function heartSprite(h,l){return mk(96,96,c=>{c.shadowColor='hsl('+h+',100%,65%)';c.shadowBlur=18;c.fillStyle='hsl('+h+',95%,'+l+'%)';heartPath(c,48,50,1.8);c.fill();c.shadowBlur=0;c.fillStyle='rgba(255,255,255,.55)';c.beginPath();c.ellipse(37,38,5,3,-.6,0,6.3);c.fill()})}
+function tinyHeart(h,l){return mk(32,32,c=>{c.shadowColor='hsl('+h+',100%,66%)';c.shadowBlur=7;c.fillStyle='hsl('+h+',90%,'+l+'%)';heartPath(c,16,17,.68);c.fill()})}
+function roseSprite(){return mk(112,112,c=>{c.shadowColor='#ff3b6b';c.shadowBlur=16;c.fillStyle='#2e9e55';c.strokeStyle='#2e9e55';c.lineWidth=4;c.beginPath();c.moveTo(56,64);c.lineTo(56,104);c.stroke();c.beginPath();c.ellipse(72,88,15,6,-.5,0,6.3);c.fill();c.beginPath();c.ellipse(41,92,13,5,.5,0,6.3);c.fill();
+  for(let k=0;k<4;k++){c.fillStyle='hsl(345,'+(82+k*4)+'%,'+(34+k*8)+'%)';c.beginPath();c.arc(56,44,26-k*6,0,6.3);c.fill()}
+  c.shadowBlur=0;c.strokeStyle='rgba(255,205,220,.85)';c.lineWidth=2;c.beginPath();for(let a=0;a<13;a+=.2){const r=1.7*a;c.lineTo(56+Math.cos(a)*r,44+Math.sin(a)*r)}c.stroke()})}
+function photoSprite(src){const cv=mk(150,150,()=>{}),im=new Image();im.onload=()=>{const c=cv.getContext('2d');c.shadowColor='#ff5c9a';c.shadowBlur=18;c.fillStyle='#fff';c.fillRect(16,16,118,118);c.shadowBlur=0;c.drawImage(im,21,21,108,108)};im.src=src;return cv}
+function textSprite(t){const f='600 30px system-ui,sans-serif',m=document.createElement('canvas').getContext('2d');m.font=f;const w=Math.ceil(m.measureText(t).width)+70;
+  return mk(w,80,c=>{c.font=f;c.textAlign='center';c.textBaseline='middle';c.fillStyle='#ffe3ee';c.shadowColor='#ff3d85';c.shadowBlur=24;c.fillText(t,w/2,40);c.shadowBlur=10;c.fillText(t,w/2,40)})}
+
+function initScene(){
+  const cv=$('cv'),ctx=cv.getContext('2d'),rnd=(a,b)=>a+Math.random()*(b-a),clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  const spH=[heartSprite(340,60),heartSprite(350,70),heartSprite(320,72),heartSprite(0,62)],spR=roseSprite();
+  const tiny=[tinyHeart(345,62),tinyHeart(352,70),tinyHeart(335,76)];
+  const stars=Array.from({length:130},()=>({x:Math.random(),y:Math.random(),s:rnd(.6,1.8),p:Math.random()*6.28}));
+  /* hạt trái tim: đích (hình tim, dày ở viền) + điểm xuất phát bên dưới màn hình */
+  const NP=3000,T=new Float32Array(NP*3),S0=new Float32Array(NP*3),DL=new Float32Array(NP),PHs=new Float32Array(NP),SZ=new Float32Array(NP),SP=new Uint8Array(NP);
+  for(let i=0;i<NP;i++){
+    const t=Math.random()*6.2832,x=16*Math.pow(Math.sin(t),3),y=-(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t));
+    const s=Math.random()<.72?1-Math.pow(Math.random(),3)*.4:Math.sqrt(Math.random());
+    T[i*3]=x/17*s+rnd(-.012,.012);T[i*3+1]=y/17*s+.06+rnd(-.012,.012);T[i*3+2]=(Math.random()-.5)*2*.3*Math.sqrt(Math.max(0,1-s*s)+.02);
+    S0[i*3]=rnd(-2.2,2.2);S0[i*3+1]=rnd(3,5.5);S0[i*3+2]=rnd(-1.2,1.2);
+    DL[i]=Math.random()*2;PHs[i]=Math.random()*6.28;SZ[i]=rnd(4,9);SP[i]=i%3;
+  }
+  let items=[],st=-1,a0=0,ha=0,bgA=1,yaw=0,pitch=.1,vyaw=0,drag=null,moved=0,last=0,ph=[];
+  function place(it,init){const r=rnd(1.0,2.5),a=Math.random()*6.2832;it.x=Math.cos(a)*r;it.z=Math.sin(a)*r;it.y=init?rnd(-2.6,2.6):2.8}
+  function addBg(spr,size,vy,k){const it={k,m:'bg',spr,size,vy};place(it,true);items.push(it)}
+  for(let i=0;i<34;i++)addBg(spH[i%4],rnd(.16,.3),rnd(.25,.55),'h');
+  for(let i=0;i<10;i++)addBg(spR,rnd(.28,.4),rnd(.22,.4),'r');
+  const beat=t=>{const p=(t%1.1)/1.1;return 1+.13*Math.exp(-Math.pow((p-.08)*14,2))+.09*Math.exp(-Math.pow((p-.3)*12,2))};
+  const hint=s=>$('hint').textContent=s;
+
+  function showCard(){$('ttl').classList.remove('on');$('mt').textContent=W.t;$('mb').textContent=W.x;$('msg').classList.remove('hide');st=2;hint('')}
+  function startCollage(){
+    st=3;hint('Chạm để tiếp tục');const now=performance.now()/1000,n=Math.max(10,ph.length);
+    for(let i=0;i<n;i++){
+      const t=i/n*6.2832,tx=16*Math.pow(Math.sin(t),3)/17*1.45,ty=-(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))/17*1.45+.1,sg=Math.random()<.5?-1:1;
+      items.push({k:'p',m:'fly',spr:ph[i%ph.length],size:.46,t0:now+i*.14,sx:sg*rnd(2.5,3.6),sy:rnd(-3,3),sz:rnd(-1.5,1.5),tx,ty,tz:rnd(-.05,.05),x:0,y:9,z:0,vy:0});
+    }
+  }
+  function go4(){
+    st=4;hint('Kéo để xoay 360°');
+    for(const it of items)if(it.k==='p'){it.m='float';it.vy=rnd(.28,.45)}
+    const Ls=lines(W.f||W.t).slice(0,10),gap=Math.max(.6,5.6/Math.max(1,Ls.length));
+    Ls.forEach((s,i)=>{const a=Math.random()*6.2832,r=rnd(.3,.8);items.push({k:'t',m:'txt',spr:textSprite(s),size:.4,vy:.2,span:gap*Ls.length,x:Math.cos(a)*r,z:Math.sin(a)*r,y:2.8+i*gap})});
+  }
+  function tap(){if(st===1)showCard();else if(st===3)go4()}
+  $('msg').onclick=()=>{$('msg').classList.add('hide');if(ph.length)startCollage();else go4()};
+
+  cv.addEventListener('pointerdown',e=>{if(st<0)return;drag={x:e.clientX,y:e.clientY,t:e.timeStamp};moved=0;cv.setPointerCapture(e.pointerId)});
+  cv.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y,dt=Math.max(8,e.timeStamp-drag.t);moved+=Math.abs(dx)+Math.abs(dy);
+    yaw+=dx*.008;pitch=clamp(pitch+dy*.006,-1.1,1.1);vyaw=clamp(dx*.008/dt*1000,-4,4);drag.x=e.clientX;drag.y=e.clientY;drag.t=e.timeStamp});
+  cv.addEventListener('pointerup',()=>{if(drag&&moved<8&&st>=0)tap();drag=null});
+  cv.addEventListener('pointercancel',()=>{drag=null});
+
+  function frame(ms){
+    const dt=Math.min(.05,(ms-last)/1000||.016);last=ms;
+    const r=devicePixelRatio||1,w=Math.round(cv.clientWidth*r),h=Math.round(cv.clientHeight*r);if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h}
+    const S=Math.min(w,h)*.42,cx=w/2,cy=h/2,t=ms/1000,ae=st>=0?(ms-a0)/1000:0,formed=ae>3.7,b=formed?beat(t):1;
+    ctx.globalCompositeOperation='source-over';ctx.globalAlpha=1;ctx.clearRect(0,0,w,h);
+    if(st===0&&formed){st=1;hint('Chạm vào trái tim 💗');$('ttl').classList.add('on')}
+    ha+=((st>=0&&st!==3?1:0)-ha)*Math.min(1,dt*3);
+    bgA+=((st<0||st>=4?1:0)-bgA)*Math.min(1,dt*2);
+    if(st>=0)for(const s of stars){ctx.fillStyle='rgba(255,235,245,'+(.2+.5*(.5+.5*Math.sin(t*1.5+s.p)))+')';ctx.beginPath();ctx.arc(s.x*w,s.y*h,s.s*r,0,6.3);ctx.fill()}
+    if(!drag){vyaw*=Math.pow(.08,dt);yaw+=(vyaw+(st>=0?.14:.06))*dt}
+    const cY=Math.cos(yaw),sY=Math.sin(yaw),cP=Math.cos(pitch),sP=Math.sin(pitch);
+    const L=[];
+    for(const it of items){
+      let al=1;
+      if(it.m==='fly'){const pr=clamp((t-it.t0)/1.7,0,1),e=1-Math.pow(1-pr,3);it.x=it.sx+(it.tx-it.sx)*e;it.y=it.sy+(it.ty-it.sy)*e+(pr>=1?Math.sin(t*1.5+it.sx)*.015:0);it.z=it.sz+(it.tz-it.sz)*e;al=Math.min(1,pr*3)}
+      else{it.y-=it.vy*dt;if(it.y<-2.8){if(it.span)it.y+=it.span;else place(it,false)}}
+      if(it.m==='bg')al=bgA;
+      const x1=it.x*cY+it.z*sY,z1=-it.x*sY+it.z*cY,y2=it.y*cP-z1*sP,z2=it.y*sP+z1*cP;
+      L.push([it,x1,y2,z2,4/(4-z2),al]);
+    }
+    L.sort((a,c)=>a[3]-c[3]);
+    const drawIt=e=>{const it=e[0],f=e[4],hh=it.size*S*f,ww=hh*it.spr.width/it.spr.height;
+      const a=e[5]*clamp((2.7-Math.abs(it.y))/.5,0,1)*(.55+.45*(e[3]+2.5)/5);if(a<.02)return;
+      ctx.globalAlpha=Math.min(1,a);ctx.drawImage(it.spr,cx+e[1]*S*f-ww/2,cy+e[2]*S*f-hh/2,ww,hh)};
+    for(const e of L)if(e[3]<0)drawIt(e);
+    if(st>=0&&ha>.01){
+      const fi=clamp((ae-3)/1.2,0,1),g=ctx.createRadialGradient(cx,cy,S*.15,cx,cy,S*1.8);
+      g.addColorStop(0,'rgba(255,50,120,'+(.3*b*ha*fi)+')');g.addColorStop(1,'rgba(255,50,120,0)');ctx.globalAlpha=1;ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+      ctx.globalCompositeOperation='lighter';const k=S/160;
+      for(let i=0;i<NP;i++){
+        const p=clamp((ae-DL[i])/1.7,0,1);if(p<=0)continue;const e=1-Math.pow(1-p,3),wb=(1-e)*Math.sin(ae*3+PHs[i])*.12,j=i*3;
+        const x=(S0[j]+(T[j]-S0[j])*e+wb)*b,y=(S0[j+1]+(T[j+1]-S0[j+1])*e)*b,z=(S0[j+2]+(T[j+2]-S0[j+2])*e)*b;
+        const x1=x*cY+z*sY,z1=-x*sY+z*cY,y2=y*cP-z1*sP,z2=y*sP+z1*cP,fz=4/(4-z2),rr=SZ[i]*k*fz*.5*(p<1?1:.8+.25*Math.sin(t*2+PHs[i]));
+        ctx.globalAlpha=Math.min(1,(.4+.35*(.5+.5*z2/.5))*ha);
+        ctx.drawImage(tiny[SP[i]],cx+x1*S*fz-rr,cy+y2*S*fz-rr,rr*2,rr*2);
+      }
+      ctx.globalCompositeOperation='source-over';
+    }
+    for(const e of L)if(e[3]>=0)drawIt(e);
+    ctx.globalAlpha=1;requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+  return{enter(Wd){items=items.filter(i=>i.m==='bg');ph=(Wd.i||[]).map(photoSprite);$('ttl').textContent=Wd.t;st=0;a0=performance.now();hint('')}};
+}
+const SC=initScene();
+</script>
+</body>
+</html>
