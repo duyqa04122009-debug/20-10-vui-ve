@@ -1,0 +1,138 @@
+--[[
+    ═══════════════════════════════════════════════════════════════════════
+    BLOX FRUITS  •  AUTO FARM HUB  (Rayfield UI)
+    Hỗ trợ: PC + Mobile (Delta / Wave / Codex / Arceus X / Fluxus)
+    ═══════════════════════════════════════════════════════════════════════
+    GHI CHÚ KỸ THUẬT:
+    - Script dùng remote nội bộ của Blox Fruits (CommF_) => có thể lỗi
+      nếu game cập nhật API. Tọa độ đảo là tọa độ tham chiếu, có thể lệch.
+    - Chống kick: mọi lần dịch chuyển đều qua safeTP() (anchor + delay
+      hoặc tween tốc độ giới hạn thay vì set CFrame liên tục).
+    - Mọi vòng lặp đều có cờ trạng thái riêng, tắt là dừng ngay, không
+      để lại thread rác gây lag.
+    ═══════════════════════════════════════════════════════════════════════
+--]]
+
+--====================== SERVICES & BIẾN TOÀN CỤC ======================--
+local Players        = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService   = game:GetService("TweenService")
+local VirtualUser    = game:GetService("VirtualUser")
+local UserInputService = game:GetService("UserInputService")
+
+local LP = Players.LocalPlayer
+
+-- Remote chính của Blox Fruits (có thể nil nếu game đổi cấu trúc)
+local Remotes = ReplicatedStorage:FindFirstChild("Remotes")
+local CommF_  = Remotes and Remotes:FindFirstChild("CommF_")
+
+-- Bảng trạng thái trung tâm: mọi toggle ghi vào đây, vòng lặp đọc từ đây
+local State = {
+    weapon        = "",
+    bringMobs     = true,
+    safeTPMode    = true,   -- bật: tween ngắn để tránh kick
+    autoFarmLevel = false,
+    autoChest     = false,
+    killAura      = false,
+    autoDungeon   = false,
+    chipName      = "Flame",
+    stats         = { Melee = false, Defense = false, Sword = false, Gun = false, Fruit = false },
+    thread = { attack = nil, farm = nil, chest = nil, stats = nil, raid = nil, fruit = nil, tracker = nil },
+}
+
+--====================== HÀM TIỆN ÍCH ======================--
+
+-- Gọi remote CommF_ an toàn, không bao giờ làm hỏng script
+local function invoke(...)
+    if not CommF_ then return false end
+    local args = { ... }
+    local ok = pcall(function()
+        CommF_:InvokeServer(table.unpack(args))
+    end)
+    return ok
+end
+
+-- Lấy Character / Humanoid / HumanoidRootPart, trả nil nếu đang chết
+local function getChar()
+    local char = LP.Character
+    if not char then return nil end
+    local hum = char:FindFirstChildOfClass("Humanoid")
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    if not hum or not hrp or hum.Health <= 0 then return nil end
+    return char, hum, hrp
+end
+
+-- Lấy cấp độ nhân vật (dùng để lọc quest giver phù hợp)
+local function getLevel()
+    local data = LP:FindFirstChild("Data")
+    local lv = data and data:FindFirstChild("Level")
+    return lv and lv.Value or 1
+end
+
+-- DỊCH CHUYỂN AN TOÀN: anchor trước khi đổi CFrame, delay ngắn sau đó.
+-- Nếu safeTPMode bật và quãng đường ngắn -> dùng Tween tốc độ giới hạn.
+local function safeTP(targetCF, distance)
+    local _, _, hrp = getChar()
+    if not hrp then return end
+    hrp.Anchored = true
+    if State.safeTPMode and distance and distance < 300 then
+        local tw = TweenService:Create(
+            hrp,
+            TweenInfo.new(math.clamp(distance / 250, 0.2, 1.4), Enum.EasingStyle.Linear),
+            { CFrame = targetCF }
+        )
+        tw:Play()
+        tw.Completed:Wait()
+    else
+        hrp.CFrame = targetCF
+        task.wait(0.1) -- delay chống anti-cheat nhận diện dịch chuyển tức thời
+    end
+    task.wait(0.05)
+    hrp.Anchored = false
+end
+
+-- Giả lập chạm (nhặt rương / trái) mà không cần đứng chờ
+local function touch(part)
+    local _, _, hrp = getChar()
+    if not hrp or not part then return end
+    if firetouchinterest then
+        pcall(firetouchinterest, hrp, part, 0)
+        task.wait()
+        pcall(firetouchinterest, hrp, part, 1)
+    else
+        hrp.CFrame = part.CFrame
+    end
+end
+
+-- Kích hoạt ProximityPrompt / ClickDetector (dùng cho NPC, rương)
+local function fireInteract(obj)
+    for _, d in ipairs(obj:GetDescendants()) do
+        if d:IsA("ProximityPrompt") and fireproximityprompt then
+            pcall(fireproximityprompt, d)
+            return true
+        elseif d:IsA("ClickDetector") and fireclickdetector then
+            pcall(fireclickdetector, d)
+            return true
+        end
+    end
+    return false
+end
+
+-- Danh sách quái còn sống trong workspace.Enemies
+local function getEnemies()
+    local list = {}
+    local folder = workspace:FindFirstChild("Enemies")
+    if not folder then return list end
+    for _, v in ipairs(folder:GetChildren()) do
+        local hum = v:FindFirstChildOfClass("Humanoid")
+        local hrp = v:FindFirstChild("HumanoidRootPart")
+        if hum and hrp and hum.Health > 0 then
+            table.insert(list, { model = v, hum = hum, hrp = hrp })
+        end
+    end
+    return list
+end
+
+-- Gom quái về trước mặt người chơi
+local function bringMob(enemy, hrp)
+    if not enemy.hrp or enemy
